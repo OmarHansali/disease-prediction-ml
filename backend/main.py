@@ -28,7 +28,7 @@ app.add_middleware(
 
 # --- 3. MODEL INITIALIZATION (LOAD ONCE) ---
 try:
-    DISEASE_MODEL = joblib.load('model/nb_model.pkl') 
+    DISEASE_MODEL = joblib.load('model/nb_model.pkl')
     NLP_MODEL = SentenceTransformer('all-MiniLM-L6-v2')
     SYMPTOM_EMBEDDINGS = NLP_MODEL.encode(SYMPTOMS_LIST, convert_to_tensor=True)
     print("✅ Models and embeddings loaded successfully.")
@@ -140,15 +140,9 @@ try:
     # Attempt to load `data/description.csv` which may contain richer disease text to search.
     try:
         details_df = pd.read_csv('data/description.csv')
-        # Find a likely text column in details_df
-        text_col = None
-        for candidate in ['Details', 'details', 'Description', 'description', 'Info', 'info', 'Text', 'text']:
-            if candidate in details_df.columns:
-                text_col = candidate
-                break
 
-        if text_col and 'Disease' in details_df.columns:
-            DISEASE_DETAILS = dict(zip(details_df['Disease'], details_df[text_col].fillna('').astype(str)))
+        if 'Description' and 'Disease' in details_df.columns:
+            DISEASE_DETAILS = dict(zip(details_df['Disease'], details_df['Description'].fillna('').astype(str)))
         else:
             DISEASE_DETAILS = {k: v.get('description', '') for k, v in DISEASE_INFO.items()}
     except Exception:
