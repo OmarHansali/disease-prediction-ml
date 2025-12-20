@@ -38,6 +38,7 @@ disease-prediction-ml/
 │
 ├── backend/
 │ ├── main.py
+│ ├── data/
 │ ├── model/
 │
 ├── frontend/
