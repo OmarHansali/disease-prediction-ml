@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer, util
-import numpy as np # Import numpy here for use in the prediction endpoint
+import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import json
@@ -28,7 +28,7 @@ app.add_middleware(
 
 # --- 3. MODEL INITIALIZATION (LOAD ONCE) ---
 try:
-    DISEASE_MODEL = joblib.load('model/voting_ensemble_model.pkl') 
+    DISEASE_MODEL = joblib.load('model/nb_model.pkl') 
     NLP_MODEL = SentenceTransformer('all-MiniLM-L6-v2')
     SYMPTOM_EMBEDDINGS = NLP_MODEL.encode(SYMPTOMS_LIST, convert_to_tensor=True)
     print("✅ Models and embeddings loaded successfully.")
@@ -50,7 +50,7 @@ if DISEASE_MODEL is not None:
         else:
             # numeric classes: rebuild a LabelEncoder from the training CSV to map back
             try:
-                df_labels = pd.read_csv('Diseases_and_Symptoms_dataset.csv')
+                df_labels = pd.read_csv('data/Diseases_and_Symptoms_dataset.csv')
                 le = LabelEncoder()
                 le.fit(df_labels['diseases'])
                 LABEL_ENCODER = le
@@ -67,11 +67,11 @@ DISEASE_INFO = {}
 DISEASE_DETAILS = {}
 try:
     # Load descriptions
-    desc_df = pd.read_csv('description.csv')
+    desc_df = pd.read_csv('data/description.csv')
     descriptions = {disease.lower().strip(): desc for disease, desc in zip(desc_df['Disease'], desc_df['Description'])}
     
     # Load precautions
-    prec_df = pd.read_csv('precautions.csv')
+    prec_df = pd.read_csv('data/precautions.csv')
     precautions = {}
     for _, row in prec_df.iterrows():
         disease = row['Disease']
@@ -81,7 +81,7 @@ try:
         precautions[disease_normalized] = precs
     
     # Load medications
-    med_df = pd.read_csv('medications.csv')
+    med_df = pd.read_csv('data/medications.csv')
     medications = {}
     for _, row in med_df.iterrows():
         disease = row['Disease']
@@ -97,7 +97,7 @@ try:
         medications[disease_normalized] = meds if isinstance(meds, list) else [meds]
     
     # Load diets
-    diet_df = pd.read_csv('diets.csv')
+    diet_df = pd.read_csv('data/diets.csv')
     diets = {}
     for _, row in diet_df.iterrows():
         disease = row['Disease']
@@ -112,7 +112,7 @@ try:
         diets[disease_normalized] = diet if isinstance(diet, list) else [diet]
     
     # Load workouts
-    workout_df = pd.read_csv('workout.csv')
+    workout_df = pd.read_csv('data/workout.csv')
     workouts = {}
     for _, row in workout_df.iterrows():
         disease = row['Disease']
@@ -137,9 +137,9 @@ try:
             'workout': workouts.get(disease_normalized, [])
         }
     
-    # Attempt to load `details.csv` which may contain richer disease text to search.
+    # Attempt to load `data/description.csv` which may contain richer disease text to search.
     try:
-        details_df = pd.read_csv('description.csv')
+        details_df = pd.read_csv('data/description.csv')
         # Find a likely text column in details_df
         text_col = None
         for candidate in ['Details', 'details', 'Description', 'description', 'Info', 'info', 'Text', 'text']:
@@ -295,7 +295,7 @@ async def search_diseases(request: NLPSearchRequest):
     query_embedding = NLP_MODEL.encode(query_text, convert_to_tensor=True)
     
     # Encode all disease descriptions
-    # Prefer searching `details.csv` loaded into DISEASE_DETAILS; fall back to DISEASE_INFO descriptions
+    # Prefer searching `data/description.csv` loaded into DISEASE_DETAILS; fall back to DISEASE_INFO descriptions
     source_map = DISEASE_DETAILS if DISEASE_DETAILS else {k: v.get('description', '') for k, v in DISEASE_INFO.items()}
 
     disease_names = list(source_map.keys())

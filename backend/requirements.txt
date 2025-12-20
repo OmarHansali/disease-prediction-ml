@@ -1,0 +1,26 @@
+# Core scientific stack
+numpy
+pandas
+scipy
+
+# Visualization (for analysis / notebooks)
+matplotlib
+seaborn
+
+# Machine Learning
+scikit-learn
+imbalanced-learn
+xgboost
+joblib
+
+# NLP / Embeddings
+sentence-transformers
+torch
+
+# Backend API
+fastapi
+uvicorn
+pydantic
+
+# Utilities
+jsonschema
