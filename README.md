@@ -39,7 +39,7 @@ disease-prediction-ml/
 ├── backend/
 │ ├── main.py
 │ ├── data/
-│ ├── model/
+│ └── model/
 │
 ├── frontend/
 │ ├── src/
