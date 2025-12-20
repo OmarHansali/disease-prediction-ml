@@ -54,7 +54,7 @@ disease-prediction-ml/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/OmarHansali/disease-prediction-ml
 cd project-root
 ```
 
