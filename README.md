@@ -38,7 +38,8 @@ disease-prediction-ml/
 │
 ├── backend/
 │ ├── main.py
-│ ├── model/
+│ ├── data/
+│ └── model/
 │
 ├── frontend/
 │ ├── src/
@@ -53,7 +54,7 @@ disease-prediction-ml/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/OmarHansali/disease-prediction-ml
 cd project-root
 ```
 
@@ -109,8 +110,6 @@ npm run dev
 ---
 
 ## ⚠️ Important Notes
-- Disease names must match **exactly** between predictions and medical data.
-- Some diseases may not display all sections if information is unavailable.
 - The app is for **educational and decision-support purposes only**.
 
 ---
