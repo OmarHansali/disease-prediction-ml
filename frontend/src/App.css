@@ -590,3 +590,18 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.ai-diseases-panel {
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
+  padding-top: 5px;
+}
+
+.ai-diseases-panel ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ai-diseases-panel li {
+  margin-bottom: 5px;
+}
